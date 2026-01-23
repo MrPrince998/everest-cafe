@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Coffee",
-    "slug": "Coffee",
+    "name": "Koffee",
+    "slug": "Koffee",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "coffee",
+    "scheme": "koffee",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -44,7 +44,5 @@
       "typedRoutes": true,
       "reactCompiler": true
     }
-  },
-  "name": "Coffee",
-  "displayName": "Coffee"
+  }
 }
