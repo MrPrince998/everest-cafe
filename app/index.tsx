@@ -1,15 +1,18 @@
-import { Text, View } from "react-native";
+import { requestLocationPermission } from "@/hooks/getLocation";
+import { Stack } from "expo-router";
+import React, { useEffect } from "react";
+import Onboarding from "./(onboarding)";
 
-export default function Index() {
+const index = () => {
+  useEffect(() => {
+    requestLocationPermission();
+  }, []);
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <Onboarding />
+    </>
   );
-}
+};
+
+export default index;

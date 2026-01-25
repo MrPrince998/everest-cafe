@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Koffee",
-    "slug": "Koffee",
+    "name": "Everest Coffee",
+    "slug": "Everest-Coffee",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -37,6 +37,14 @@
           "dark": {
             "backgroundColor": "#000000"
           }
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysPermission": "Allow Everest Coffee to access your location always.",
+          "locationWhenInUsePermission": "Allow Everest Coffee to access your location while using the app.",
+          "locationAlwaysAndWhenInUsePermission": "Allow Everest Coffee to always and when in use access your location."
         }
       ]
     ],
