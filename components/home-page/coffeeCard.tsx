@@ -17,7 +17,7 @@ const CoffeeCard = ({
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.push(`/coffee/${id}`);
+    router.push(`/main/menu/${id}`);
   };
   return (
     <View

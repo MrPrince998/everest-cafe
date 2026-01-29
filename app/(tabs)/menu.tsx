@@ -8,6 +8,7 @@ import {
   OTHERS_DATA,
 } from "@/const/coffeeContant";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React from "react";
 import {
   FlatList,
@@ -25,7 +26,10 @@ const MenuScreen = () => {
   const styles = getStyles(theme);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
+    <SafeAreaView
+      edges={["top"]}
+      style={{ flex: 1, backgroundColor: theme.background }}
+    >
       <View style={styles.header}>
         <Ionicons
           name="cafe-outline"
@@ -73,7 +77,7 @@ const MenuSection = ({
   theme: any;
   styles: any;
 }) => (
-  <View style={{ marginBottom: 28 }}>
+  <View>
     <Text style={styles.sectionHeader}>{title}</Text>
     <FlatList
       data={data}
@@ -83,7 +87,7 @@ const MenuSection = ({
       )}
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingVertical: 6 }}
+      contentContainerStyle={{ paddingVertical: 6, gap: 16 }}
     />
   </View>
 );
@@ -96,35 +100,53 @@ const MenuCard = ({
   item: CoffeeItem | DrinkItem | OtherItem;
   theme: any;
   styles: any;
-}) => (
-  <View style={styles.card}>
-    <Image source={{ uri: item.image }} style={styles.cardImage} />
-    <View style={styles.cardInfo}>
-      <Text style={styles.cardTitle} numberOfLines={1}>
-        {item.name}
-      </Text>
-      {"tagline" in item && item.tagline && (
-        <Text style={styles.cardTagline}>{item.tagline}</Text>
-      )}
-      {"description" in item && item.description && (
-        <Text style={styles.cardDesc} numberOfLines={2}>
-          {item.description}
+}) => {
+  const router = useRouter();
+  // Only allow navigation for CoffeeItem (has id and detail page)
+  const isCoffee = "description" in item && "tagline" in item;
+  const handlePress = () => {
+    if (isCoffee) {
+      router.push(`/main/menu/${item.id}`);
+    }
+  };
+  return (
+    <View style={styles.card}>
+      <TouchableOpacity
+        disabled={!isCoffee}
+        onPress={handlePress}
+        accessibilityRole="imagebutton"
+        accessibilityLabel={`View details for ${item.name}`}
+        style={{ width: "100%" }}
+      >
+        <Image source={{ uri: item.image }} style={styles.cardImage} />
+      </TouchableOpacity>
+      <View style={styles.cardInfo}>
+        <Text style={styles.cardTitle} numberOfLines={1}>
+          {item.name}
         </Text>
-      )}
-      <View style={styles.cardRow}>
-        <Text style={styles.cardPrice}>${item.price.toFixed(2)}</Text>
-        <TouchableOpacity
-          style={styles.orderBtn}
-          accessibilityRole="button"
-          accessibilityLabel={`Order ${item.name}`}
-        >
-          <Ionicons name="cart-outline" size={18} color={theme.white} />
-          <Text style={styles.orderBtnText}>Order</Text>
-        </TouchableOpacity>
+        {"tagline" in item && item.tagline && (
+          <Text style={styles.cardTagline}>{item.tagline}</Text>
+        )}
+        {"description" in item && item.description && (
+          <Text style={styles.cardDesc} numberOfLines={2}>
+            {item.description}
+          </Text>
+        )}
+        <View style={styles.cardRow}>
+          <Text style={styles.cardPrice}>${item.price.toFixed(2)}</Text>
+          <TouchableOpacity
+            style={styles.orderBtn}
+            accessibilityRole="button"
+            accessibilityLabel={`Order ${item.name}`}
+          >
+            <Ionicons name="cart-outline" size={18} color={theme.white} />
+            <Text style={styles.orderBtnText}>Order</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
-  </View>
-);
+  );
+};
 
 const getStyles = (theme: any) =>
   StyleSheet.create({
@@ -142,7 +164,7 @@ const getStyles = (theme: any) =>
     },
     scrollContent: {
       padding: 16,
-      paddingBottom: 32,
+      gap: 24,
     },
     sectionHeader: {
       fontSize: 17,
@@ -154,10 +176,9 @@ const getStyles = (theme: any) =>
       letterSpacing: 0.2,
     },
     card: {
-      width: 220,
+      width: 200,
       backgroundColor: theme.white,
       borderRadius: 16,
-      marginRight: 16,
       shadowColor: theme.primary,
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.06,
@@ -186,7 +207,7 @@ const getStyles = (theme: any) =>
     },
     cardDesc: {
       fontSize: 13,
-      color: theme.muted,
+      color: theme.foreground,
       marginBottom: 8,
     },
     cardRow: {
