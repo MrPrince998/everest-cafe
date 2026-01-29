@@ -5,7 +5,7 @@ import {
   Dimensions,
   FlatList,
   Image,
-  StatusBar,
+  RefreshControl,
   Text,
   View,
 } from "react-native";
@@ -24,7 +24,7 @@ import { getCurrentLocation } from "../../hooks/getLocation";
 const { width } = Dimensions.get("window");
 
 const HomeScreen = () => {
-  const { muted, white } = useAppTheme();
+  const theme = useAppTheme();
   const [address, setAddress] =
     useState<Location.LocationGeocodedAddress | null>(null);
 
@@ -57,12 +57,12 @@ const HomeScreen = () => {
 
   return (
     <LinearGradient
-      colors={["#111111", "#313131"]}
+      colors={[theme.background, theme.primaryLight]}
       start={{ x: 1, y: 0 }}
       end={{ x: 0, y: 0 }}
       style={{ flex: 1 }}
     >
-      <StatusBar barStyle="light-content" />
+      {/* <StatusBar barStyle="light-content" /> */}
       <SafeAreaView
         edges={["top"]}
         style={{
@@ -80,8 +80,18 @@ const HomeScreen = () => {
           }}
         >
           <View>
-            <Text style={{ color: muted }}>Location</Text>
-            <Text style={{ color: white, fontSize: 16, fontWeight: "bold" }}>
+            <Text
+              style={{
+                color: theme.white,
+                fontWeight: "600",
+                letterSpacing: 1,
+              }}
+            >
+              Location
+            </Text>
+            <Text
+              style={{ color: theme.white, fontSize: 16, fontWeight: "bold" }}
+            >
               {address?.city ?? "Butwal"}, {address?.country ?? "Nepal"}
             </Text>
           </View>
@@ -105,7 +115,7 @@ const HomeScreen = () => {
             data={[1, 2]}
             keyExtractor={(item, index) => index.toString()}
             horizontal
-            showsHorizontalScrollIndicator={true}
+            showsHorizontalScrollIndicator={false}
             snapToInterval={width - 32}
             decelerationRate="fast"
             renderItem={({ item }) => {
@@ -124,16 +134,15 @@ const HomeScreen = () => {
             }}
             contentContainerStyle={{
               gap: 16,
+              paddingHorizontal: 16,
               paddingBottom: 20,
             }}
             style={{
               position: "absolute",
-              // width: "100%",
               height: 200,
               bottom: -160,
               left: 0,
               right: 0,
-              paddingHorizontal: 16,
             }}
           />
         </View>
@@ -141,7 +150,7 @@ const HomeScreen = () => {
       <View
         style={{
           flex: 1,
-          backgroundColor: white,
+          backgroundColor: theme.white,
           paddingTop: 80,
           marginTop: 60,
         }}
@@ -154,17 +163,47 @@ const HomeScreen = () => {
 
         <FlatList
           data={COFFEE_DATA}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => {
-            return <CoffeeCard {...item} />;
+            return (
+              <View
+                style={{
+                  flex: 1,
+                  padding: 16,
+                  height: "auto",
+                }}
+              >
+                <CoffeeCard {...item} />
+              </View>
+            );
           }}
-          contentContainerStyle={{
-            gap: 16,
-            paddingBottom: 20,
-          }}
-          style={{
-            marginTop: 16,
-          }}
+          ListEmptyComponent={
+            <View style={{ alignItems: "center", marginTop: 40 }}>
+              <Text
+                style={{
+                  color: theme.foreground,
+                  fontSize: 18,
+                  marginBottom: 8,
+                }}
+              >
+                No coffee found.
+              </Text>
+              <Image
+                source={require("../../assets/images/coffee-cup.png")}
+                style={{ width: 120, height: 120, opacity: 0.5 }}
+              />
+            </View>
+          }
+          refreshControl={
+            <RefreshControl
+              refreshing={false}
+              onRefresh={() => {}}
+              tintColor={theme.primary}
+            />
+          }
+          accessibilityLabel="Coffee list"
         />
       </View>
 

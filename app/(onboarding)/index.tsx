@@ -1,4 +1,6 @@
+import { useAppTheme } from "@/components/theme/useTheme";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import {
@@ -14,8 +16,8 @@ import {
 
 const Onboarding = () => {
   const arrowAnimation = useRef(new Animated.Value(0)).current;
-
-  const rotuer = useRouter();
+  const theme = useAppTheme();
+  const router = useRouter();
   useEffect(() => {
     Animated.loop(
       Animated.sequence([
@@ -34,39 +36,75 @@ const Onboarding = () => {
   }, []);
 
   const handleGetStarted = () => {
-    rotuer.replace("/(tabs)");
+    router.replace("/(tabs)");
+    console.log("Get Started Pressed");
   };
   return (
     <>
-      <StatusBar barStyle="light-content" />
+      <StatusBar
+        barStyle={theme.colorMode === "dark" ? "light-content" : "dark-content"}
+      />
       <ImageBackground
         source={require("../../assets/images/boardingScreen.png")}
         style={styles.background}
+        resizeMode="cover"
+        accessible
+        accessibilityLabel="Coffee shop background"
       >
-        <View style={styles.container}>
+        {/* Top gradient overlay for app bar separation */}
+        <LinearGradient
+          colors={["rgba(255,255,255,0.85)", "rgba(255,255,255,0)"]}
+          style={styles.topGradient}
+          pointerEvents="none"
+        />
+        {/* Overlay for better text contrast */}
+        <View style={styles.overlay} pointerEvents="none" />
+        <View
+          style={[
+            styles.container,
+            { position: "absolute", top: 0, left: 0, right: 0, bottom: 0 },
+          ]}
+        >
           <View style={styles.logoContainer}>
-            <Image source={require("../../assets/images/tea.png")} />
-            <Text style={styles.logoText}>EVEREST COFFEE!</Text>
+            <Image
+              source={require("../../assets/images/tea.png")}
+              accessible
+              accessibilityLabel="Everest Coffee Logo"
+            />
+            <Text style={[styles.logoText, { color: "#fff" }]}>
+              EVEREST COFFEE!
+            </Text>
           </View>
           <View style={styles.textContainer}>
-            <Text style={styles.title}>Find your Favorite</Text>
-            <Text style={styles.subtitle}>Coffee!</Text>
-            <Text style={styles.description}>
+            <Text style={[styles.title, { color: "#fff" }]}>
+              Find your Favorite
+            </Text>
+            <Text style={[styles.subtitle, { color: "#fff" }]}>Coffee!</Text>
+            <Text style={[styles.description, { color: "#fff" }]}>
               We’re coffee shop, beer and wine bar, & event space for performing
               arts
             </Text>
           </View>
-
-          <Pressable onPress={handleGetStarted} style={styles.buttonWrapper}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>Get Started</Text>
+          <Pressable
+            onPress={handleGetStarted}
+            style={({ pressed }) => [
+              styles.buttonWrapper,
+              { opacity: pressed ? 0.7 : 1 },
+            ]}
+            accessibilityRole="button"
+            accessibilityLabel="Get Started"
+          >
+            <View style={[styles.button, { backgroundColor: theme.primary }]}>
+              <Text style={[styles.buttonText, { color: theme.white }]}>
+                Get Started
+              </Text>
               <Animated.View
                 style={{
                   transform: [{ translateX: arrowAnimation }],
                   marginLeft: 10,
                 }}
               >
-                <Ionicons name="arrow-forward" size={20} color="white" />
+                <Ionicons name="arrow-forward" size={20} color={theme.white} />
               </Animated.View>
             </View>
           </Pressable>
@@ -77,6 +115,18 @@ const Onboarding = () => {
 };
 
 const styles = StyleSheet.create({
+  topGradient: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 80,
+    zIndex: 2,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1,
+  },
   background: {
     flex: 1,
     backgroundColor: "black",

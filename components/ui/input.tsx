@@ -30,7 +30,7 @@ const Input: React.FC<InputProps> = ({
   ...props
 }) => {
   const theme = useAppTheme();
-  const { muted, primary, foreground } = theme;
+  const { muted, primary } = theme;
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = (e: any) => {
@@ -47,7 +47,11 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <View style={[themedStyles.container, containerStyle]}>
-      {label && <Text style={themedStyles.label}>{label}</Text>}
+      {label && (
+        <Text style={themedStyles.label} accessibilityLabel={label}>
+          {label}
+        </Text>
+      )}
       <View
         style={[
           themedStyles.inputContainer,
@@ -60,10 +64,13 @@ const Input: React.FC<InputProps> = ({
             disabled={!onIconPress}
             onPress={onIconPress}
             style={themedStyles.iconContainer}
+            accessibilityRole="button"
+            accessibilityLabel={iconName + " icon"}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
             <Ionicons
               name={iconName}
-              size={20}
+              size={22}
               color={isFocused ? primary : muted}
             />
           </TouchableOpacity>
@@ -73,10 +80,16 @@ const Input: React.FC<InputProps> = ({
           placeholderTextColor={muted}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          accessibilityRole="search"
+          accessibilityLabel={label || props.placeholder || "input"}
           {...props}
         />
       </View>
-      {error && <Text style={themedStyles.errorText}>{error}</Text>}
+      {error && (
+        <Text style={themedStyles.errorText} accessibilityRole="alert">
+          {error}
+        </Text>
+      )}
     </View>
   );
 };
@@ -90,7 +103,7 @@ const styles = (theme: any) =>
     label: {
       fontSize: 14,
       fontWeight: "600",
-      color: theme.foreground,
+      color: theme.primaryDark,
       marginBottom: 8,
     },
     inputContainer: {
@@ -98,7 +111,7 @@ const styles = (theme: any) =>
       alignItems: "center",
       backgroundColor: theme.white,
       borderWidth: 1,
-      borderColor: theme.border,
+      borderColor: theme.primaryLight,
       borderRadius: 12,
       paddingHorizontal: 12,
       height: 52,
@@ -114,7 +127,7 @@ const styles = (theme: any) =>
       borderWidth: 1.5,
     },
     inputError: {
-      borderColor: "red",
+      borderColor: theme.destructive || "red",
     },
     iconContainer: {
       marginRight: 10,
@@ -124,11 +137,13 @@ const styles = (theme: any) =>
       fontSize: 16,
       color: theme.foreground,
       height: "100%",
+      fontWeight: "500",
     },
     errorText: {
-      color: "red",
+      color: theme.destructive || "#D32F2F",
       fontSize: 12,
       marginTop: 4,
+      fontWeight: "600",
     },
   });
 

@@ -12,7 +12,7 @@ export const Colors = {
     secondary: "#8FAE92", // Himalayan sage green
     accent: "#C89B6D", // Latte accent
 
-    muted: "#2A221D",
+    muted: "#E8E3DD",
     border: "#3A302A",
 
     destructive: "#C23B22",

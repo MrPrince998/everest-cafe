@@ -91,19 +91,28 @@ const styles = (theme: any) =>
       borderRadius: 12,
       backgroundColor: theme.white,
       borderWidth: 1,
-      borderColor: theme.white,
+      borderColor: theme.border,
+      shadowColor: theme.primary,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.06,
+      shadowRadius: 3,
+      elevation: 1,
     },
     categoryItemActive: {
       backgroundColor: theme.primary,
       borderColor: theme.primary,
+      shadowColor: theme.primaryDark,
+      shadowOpacity: 0.15,
+      elevation: 2,
     },
     categoryText: {
       fontSize: 14,
       fontWeight: "600",
-      color: theme.black,
+      color: theme.primaryDark,
     },
     categoryTextActive: {
       color: theme.white,
+      fontWeight: "700",
     },
   });
 

@@ -10,6 +10,19 @@ export interface CoffeeItem {
   image: string;
 }
 
+export interface DrinkItem {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+}
+
+export interface OtherItem {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+}
 export const CATEGORIES = ["All Coffee", "Machiato", "Latte", "Americano"];
 
 export const COFFEE_DATA: CoffeeItem[] = [
@@ -67,7 +80,7 @@ export const COFFEE_DATA: CoffeeItem[] = [
   },
 ];
 
-export const DRINKS_DATA = [
+export const DRINKS_DATA: DrinkItem[] = [
   {
     id: "d1",
     name: "Iced Matcha Latte",
@@ -84,7 +97,7 @@ export const DRINKS_DATA = [
   },
 ];
 
-export const OTHERS_DATA = [
+export const OTHERS_DATA: OtherItem[] = [
   {
     id: "o1",
     name: "Chocolate Croissant",
